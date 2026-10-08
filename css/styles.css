@@ -231,3 +231,8 @@ footer p + p { margin-top: 6px; }
 .sin-horas .link { background: none; border: 0; padding: 0; color: var(--lila-profundo); text-decoration: underline; cursor: pointer; font: inherit; }
 
 .resumen.transfer { background: var(--beige-suave); padding: 14px 18px; border-radius: 10px; }
+
+.cab-transfer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.btn-copiar { font: inherit; font-size: .74rem; padding: 3px 11px; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: var(--medio); opacity: .55; cursor: pointer; transition: opacity .15s; }
+.btn-copiar:hover, .btn-copiar:focus-visible { opacity: 1; }
+@media print { .btn-copiar { display: none; } }

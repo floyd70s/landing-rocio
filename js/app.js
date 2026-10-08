@@ -133,7 +133,7 @@ function pantallaReservar() {
     </form>` : html`<p class="ayuda" style="margin-top:8px;color:var(--medio)">Elige una hora para continuar.</p>`}`;
 }
 
-const bloqueTransferencia = (t, codigo) => !t ? '' : html`<h2>Datos para transferir</h2>
+const bloqueTransferencia = (t, codigo) => !t ? '' : html`<div class="cab-transfer"><h2>Datos para transferir</h2><button type="button" class="btn-copiar" data-a="copiar-pago" aria-label="Copiar los datos para transferir" title="Copiar datos">Copiar datos</button></div>
     <dl class="resumen transfer"><dt>Titular</dt><dd>${t.titular}</dd><dt>RUT</dt><dd>${t.rut}</dd><dt>Banco</dt><dd>${t.banco}</dd><dt>Tipo de cuenta</dt><dd>${t.tipo_cuenta}</dd><dt>N° de cuenta</dt><dd>${t.numero}</dd><dt>Correo</dt><dd>${t.email}</dd></dl>
     <p class="pol">Indica tu código de reserva <strong>${codigo}</strong> y envía el comprobante a <strong>${t.email}</strong>. Tu cita se confirma al recibir el pago.</p>`;
 
@@ -217,6 +217,15 @@ root.addEventListener('click', async (e) => {
   if (a === 'mes') { guardarForm(); S.mes = b.dataset.m; return dibujar(); }
   if (a === 'hora') { guardarForm(); S.slot = b.dataset.h; dibujar(); return $('#c-nombre', root)?.focus(); }
   if (a === 'copiar') { try { await navigator.clipboard.writeText(S.reserva.codigo); b.textContent = '¡Copiado!'; } catch { window.prompt('Copia tu código:', S.reserva.codigo); } return; }
+  if (a === 'copiar-pago') {
+    const t = (S.reserva || S.consulta)?.transferencia, cod = (S.reserva || S.consulta)?.codigo;
+    if (!t) return;
+    const texto = ['Datos para transferencia', t.titular, `RUT: ${t.rut}`, t.banco, t.tipo_cuenta, `N° de cuenta: ${t.numero}`, `Correo: ${t.email}`, cod ? `Código de reserva: ${cod}` : null].filter(Boolean).join('\n');
+    const antes = b.textContent;
+    try { await navigator.clipboard.writeText(texto); b.textContent = '¡Copiado!'; } catch { window.prompt('Copia los datos:', texto); }
+    setTimeout(() => { b.textContent = antes; }, 1800);
+    return;
+  }
   if (a === 'imprimir') return window.print();
   if (a === 'otra') { S.screen = 'reservar'; S.vista = 'reservar'; S.slot = null; S.form = {}; S.reserva = null; return dibujar(); }
   if (a === 'reprogramar') { S.error = ''; S.slot = null; S.screen = 'reprogramar'; try { await refrescar(); } catch { /* se usa la lista anterior */ } S.dia = d.dias[0]?.fecha || null; return dibujar(); }
