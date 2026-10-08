@@ -1,0 +1,9 @@
+{
+  "name": "landing-rocio",
+  "version": "1.0.0",
+  "description": "Landing page de la abogada Rocío Zacconi. Sistema independiente: solo toma horas a través de la API pública de SGA.",
+  "scripts": { "start": "node serve.js" },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}
