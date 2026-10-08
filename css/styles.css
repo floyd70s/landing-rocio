@@ -229,3 +229,5 @@ footer p + p { margin-top: 6px; }
 .cal-grid .fuera { color: #c9c2d6; }
 .sin-horas, .nota-aviso { font-size: .92rem; color: var(--medio); }
 .sin-horas .link { background: none; border: 0; padding: 0; color: var(--lila-profundo); text-decoration: underline; cursor: pointer; font: inherit; }
+
+.resumen.transfer { background: var(--beige-suave); padding: 14px 18px; border-radius: 10px; }

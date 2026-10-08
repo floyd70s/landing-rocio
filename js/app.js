@@ -133,6 +133,10 @@ function pantallaReservar() {
     </form>` : html`<p class="ayuda" style="margin-top:8px;color:var(--medio)">Elige una hora para continuar.</p>`}`;
 }
 
+const bloqueTransferencia = (t, codigo) => !t ? '' : html`<h2>Datos para transferir</h2>
+    <dl class="resumen transfer"><dt>Titular</dt><dd>${t.titular}</dd><dt>RUT</dt><dd>${t.rut}</dd><dt>Banco</dt><dd>${t.banco}</dd><dt>Tipo de cuenta</dt><dd>${t.tipo_cuenta}</dd><dt>N° de cuenta</dt><dd>${t.numero}</dd><dt>Correo</dt><dd>${t.email}</dd></dl>
+    <p class="pol">Indica tu código de reserva <strong>${codigo}</strong> y envía el comprobante a <strong>${t.email}</strong>. Tu cita se confirma al recibir el pago.</p>`;
+
 function pantallaConfirmacion() {
   const r = S.reserva, i = d.info;
   return html`<p class="paso-t" style="text-align:center">Confirmación de reserva</p>
@@ -141,8 +145,9 @@ function pantallaConfirmacion() {
     <div class="ticket" role="status"><div class="etq">Tu código de reserva</div><div class="codigo">${r.codigo}</div><button type="button" class="btn sm" data-a="copiar">Copiar código</button></div>
     <p style="text-align:center;font-size:.9rem;color:var(--medio);margin:-8px 0 20px">Guárdalo: lo necesitarás para consultar o reprogramar tu reserva.</p>
     <dl class="resumen"><dt>Asesoría</dt><dd>${i.titulo}</dd><dt>Fecha</dt><dd>${diaLargo(r.inicio)}</dd><dt>Hora</dt><dd>${horaDe(r.inicio)} h (${i.duracion_min} minutos)</dd><dt>Modalidad</dt><dd>${i.modalidad}</dd><dt>Costo</dt><dd>${clp(r.monto ?? i.costo)}</dd><dt>Pago</dt><dd><span class="estado">Pendiente</span></dd></dl>
+    ${bloqueTransferencia(r.transferencia, r.codigo)}
     <h2>Qué sigue</h2>
-    <ol class="sigue"><li>Revisa tu correo <strong>${r.email}</strong>: te enviaremos el link o los datos de pago.</li><li><strong>Tu cita se confirma con el pago.</strong></li>
+    <ol class="sigue"><li>Realiza la transferencia con los datos de abajo (también te llegan en la invitación a <strong>${r.email}</strong>).</li><li><strong>Tu cita se confirma con el pago.</strong></li>
       ${r.invitacion_calendario ? html`<li>Te enviamos además una invitación de calendario a ese correo, con el enlace de la videollamada.</li>` : ''}
       <li>Ten a mano documentos relevantes y datos de causas previas. Si es necesario, deberás facilitar tu Clave Única para revisar el estado de la causa en el Poder Judicial.</li></ol>
     <h2>Recuerda</h2>${i.politicas.map((p) => html`<p class="pol"><strong>${p.titulo}:</strong> ${p.texto}</p>`)}
@@ -157,6 +162,7 @@ function tarjetaReserva(r) {
       <dt>Fecha</dt><dd>${diaLargo(r.inicio)}</dd><dt>Hora</dt><dd>${horaDe(r.inicio)} h</dd>
       ${r.monto != null ? html`<dt>Costo</dt><dd>${clp(r.monto)}</dd>` : ''}
       ${r.meet_url && r.pago_estado === 'pagado' ? html`<dt>Videollamada</dt><dd><a href="${r.meet_url}" rel="noopener">Abrir enlace de Meet</a></dd>` : ''}</dl>
+    ${cancelada ? '' : bloqueTransferencia(r.transferencia, r.codigo)}
     ${cancelada ? '' : r.puede_reprogramar ? html`<button class="btn" data-a="reprogramar">Reprogramar mi hora (una sola vez)</button>` : html`<p style="font-size:.92rem;color:var(--medio)">${r.motivo_no_reprogramar}</p>`}`;
 }
 
